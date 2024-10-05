@@ -7,7 +7,7 @@ screen = pygame.display.set_mode((1000, 707))
 pygame.display.set_caption('DuongVeNha')
 clock = pygame.time.Clock()
 
-background_surface = pygame.image.load('./assets/Background.png').convert()
+background_surface = pygame.image.load('./assets/background.png').convert()
 background_surface = pygame.transform.scale(background_surface, (1000, 707))
 
 
