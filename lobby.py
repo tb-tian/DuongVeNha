@@ -1,6 +1,6 @@
 import pygame
 from sys import exit
-
+import csv
 # pygame.init()
 # pygame.display.set_caption('DuongVeNha')
 # clock = pygame.time.Clock()
@@ -13,8 +13,90 @@ class Lobby:
         self.screen = pygame.display.set_mode((1000, 707))
         self.clock = pygame.time.Clock()
         pygame.display.set_caption('DuongVeNha')
-        self.state = 'lobby'
+        self.state = 'login'
+        self.init = False
         self.rect_list = [0, 0, 0, 0, 'right']
+        self.font = pygame.font.SysFont('Consolas', 32, True)
+
+    def init_login(self):
+        self.init = True
+
+        self.background = pygame.image.load('./assets/background.png').convert()
+        self.background = pygame.transform.scale(self.background, (1000, 707))
+        self.background_rect = self.background.get_rect(topleft = (0, 0))
+
+        self.name = pygame.image.load('./assets/game_name.png')
+        self.name = pygame.transform.scale(self.name, (424, 91))
+        self.name_rect = self.name.get_rect(center = (500, 83))
+
+        self.bulletin_board = pygame.image.load('./assets/bulletin_board.png').convert_alpha()
+        self.bulletin_board = pygame.transform.scale(self.bulletin_board, (573, 488))
+        self.bulletin_board_rect = self.bulletin_board.get_rect(center = (500, 373))
+
+        self.exit = pygame.image.load('./assets/exit.png')
+        self.exit = pygame.transform.scale(self.exit, (146, 50))
+        self.exit_rect = self.exit.get_rect(center = (350, 587))
+
+        self.register = pygame.image.load('./assets/register.png')
+        self.register = pygame.transform.scale(self.register, (146, 50))
+        self.register_rect = self.register.get_rect(center = (650, 587))
+
+        self.login = pygame.image.load('./assets/login.png')
+        self.login = pygame.transform.scale(self.login, (146, 50))
+        self.login_rect = self.login.get_rect(center = (650, 527))
+
+        self.username = pygame.image.load('./assets/username.png')
+        self.username = pygame.transform.scale(self.username, (510, 56))
+        self.username_rect = self.username.get_rect(center = (500, 325))
+
+        self.password = pygame.image.load('./assets/password.png')
+        self.password = pygame.transform.scale(self.password, (510, 56))
+        self.password_rect = self.password.get_rect(center = (500, 400))
+
+        self.color_active = pygame.Color(74, 232, 128)
+        self.color_passive = pygame.Color(232, 128, 74)
+        self.color = pygame.Color('black')
+        self.username_input = pygame.Rect(400, 300, 325, 50)
+        self.password_input = pygame.Rect(400, 375, 325, 50)
+        self.username_text = ''
+        self.password_text = ''
+        self.username_active = False
+        self.password_active = False
+        self.error = ''
+
+
+    def draw_login(self):
+        self.screen.blit(self.background, self.background_rect)
+        self.screen.blit(self.name, self.name_rect)
+        self.screen.blit(self.bulletin_board, self.bulletin_board_rect)
+        self.screen.blit(self.exit, self.exit_rect)
+        self.screen.blit(self.login, self.login_rect)
+        self.screen.blit(self.register, self.register_rect)
+        self.screen.blit(self.username, self.username_rect)
+        self.screen.blit(self.password, self.password_rect)
+        if self.username_active:
+            pygame.draw.rect(self.screen, self.color_active, self.username_input, 5)
+        else:
+            pygame.draw.rect(self.screen, self.color_passive, self.username_input, 5)
+        if self.password_active:
+            pygame.draw.rect(self.screen, self.color_active, self.password_input, 5)
+        else:
+            pygame.draw.rect(self.screen, self.color_passive, self.password_input, 5)
+        self.username_surface = self.font.render(self.username_text, True, self.color)
+        self.screen.blit(self.username_surface, (self.username_input.x + 10, self.username_input.y + 10))
+        self.password_surface = self.font.render(self.password_text, True, self.color)
+        self.screen.blit(self.password_surface, (self.password_input.x + 10, self.password_input.y + 10))
+        if self.error != '':
+            self.error_surface = self.font.render(self.error, True, "Red")
+            self.screen.blit(self.error_surface, (255, 445))
+
+    def check_credentials(self, username, password):
+        with open('database.csv', mode='r') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                if row['username'] == username and row['password'] == password:
+                    return True
+        return False
 
     def init_lobby(self):
         self.background = pygame.image.load('./assets/background.png').convert()
@@ -85,7 +167,6 @@ class Lobby:
 
         self.rect_list = [self.flashcards_rect, self.giaido_rect, self.tomau_rect, self.right_arrow_rect, 'right']
 
-
     def draw_mode(self):
         self.screen.blit(self.background, self.background_rect)
         self.screen.blit(self.flashcards, self.flashcards_rect)
@@ -106,12 +187,16 @@ class Lobby:
         self.bulletin_board = pygame.transform.scale(self.bulletin_board, (573, 488))
         self.bulletin_board_rect = self.bulletin_board.get_rect(center = (500, 373))
 
-        
+        self.exit = pygame.image.load('./assets/exit.png')
+        self.exit = pygame.transform.scale(self.exit, (146, 50))
+        self.exit_rect = self.exit.get_rect(center = (500, 587))
+
     def draw_setting(self):
         
         self.screen.blit(self.background, self.background_rect)
         self.screen.blit(self.name, self.name_rect)
         self.screen.blit(self.bulletin_board, self.bulletin_board_rect)
+        self.screen.blit(self.exit, self.exit_rect)
 
 
     def change_mode(self, direction):
@@ -176,6 +261,7 @@ class Lobby:
                     pygame.quit()
                     exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    # print(event.pos)
                     if(self.state == 'lobby'):
                         if(self.start_rect.collidepoint(event.pos)):
                             del self.background
@@ -227,7 +313,51 @@ class Lobby:
                             print('dieukhienxe')
                         elif(self.rect_list[2].collidepoint(event.pos) and self.rect_list[4] == 'left'):
                             print('giaimamecung')
-                        
+                    
+                    elif(self.state == 'setting'):
+                        if(self.exit_rect.collidepoint(event.pos)):
+                            self.state = 'lobby'
+
+                    elif(self.state == 'login'):
+                        if(self.exit_rect.collidepoint(event.pos)):
+                            pygame.quit()
+                            exit()
+                        if(self.login_rect.collidepoint(event.pos)):
+                            if self.check_credentials(self.username_text, self.password_text):
+                                self.state = 'lobby'
+                            else:
+                                self.error = "Invalid credentials"
+                                
+
+                        if(self.username_input.collidepoint(event.pos)):
+                            self.username_active = True
+                            self.password_active = False
+                        elif(self.password_input.collidepoint(event.pos)):
+                            self.username_active = False
+                            self.password_active = True
+                        else:
+                            self.username_active = False
+                            self.password_active = False
+                    
+                if self.state == 'login' and self.init == True:
+                    if self.username_active:
+                        if event.type == pygame.KEYDOWN:
+                            self.error = ''
+                            if event.key == pygame.K_BACKSPACE:
+                                self.username_text = self.username_text[:-1]
+                            else:
+                                self.username_text += event.unicode
+                    if self.password_active:
+                        if event.type == pygame.KEYDOWN:
+                            self.error = ''
+                            if event.key == pygame.K_BACKSPACE:
+                                self.password_text = self.password_text[:-1]
+                            else:
+                                self.password_text += event.unicode
+                    
+            if(self.state == 'login'):
+                if self.init == False: self.init_login()
+                self.draw_login()
             
             if(self.state == 'lobby'):
                 self.init_lobby()
@@ -241,7 +371,6 @@ class Lobby:
                     pass
             
             if(self.state == 'setting'):
-                
                 self.init_setting()
                 self.draw_setting()
             
