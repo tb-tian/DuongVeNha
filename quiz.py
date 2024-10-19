@@ -101,22 +101,25 @@ class Game:
             self.draw_question()
         elif self.state == "note":
             self.draw_note()
+    
+    def run(self):
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    self.handle_click(event.pos)
+            
+            self.draw_current_state()
+            pygame.display.flip()
+
+        pygame.quit()
 
 questions = [
     Question(".\\assets\\quiz\\question1\\question.png", ["Đỏ - Xanh - Vàng", "Đỏ - Xanh - Tím", "Đỏ - Hồng - Vàng", "Cam - Xanh - Vàng"], 0, ".\\assets\\quiz\\question1\\note.png")
 ]
 
-game = Game(questions)
-
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            game.handle_click(event.pos)
-
-    game.draw_current_state()
-    pygame.display.flip()
-
-pygame.quit()
+if __name__ == "__main__":
+    game = Game(questions)
+    game.run()
