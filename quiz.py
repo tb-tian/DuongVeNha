@@ -12,7 +12,7 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 PEACH = (255, 218, 185)
 
-font = pygame.font.Font(".\\Roboto-Medium.ttf", 25)
+font = pygame.font.Font("./Roboto-Medium.ttf", 25)
 
 
 class Question:
@@ -22,13 +22,15 @@ class Question:
         self.correct_answer = correct_answer
         self.note_image = pygame.image.load(note_image_path)
 
-class Game:
-    def __init__(self, questions):
-        self.questions = questions
+class GiaiDo:
+    def __init__(self):
+        self.questions = [
+            Question("./assets/quiz/question1/question.png", ["Đỏ - Xanh - Vàng", "Đỏ - Xanh - Tím", "Đỏ - Hồng - Vàng", "Cam - Xanh - Vàng"], 0, "./assets/quiz/question1/note.png")
+        ]
         self.current_question = 0
         self.state = "question"  # can be "question" or "note"
         self.selected_answer = None
-        self.background = pygame.image.load(".\\assets\\quiz\\bg.png")
+        self.background = pygame.image.load("./assets/quiz/bg.png")
         self.background = pygame.transform.scale(self.background, (WIDTH, HEIGHT))
 
     def handle_click(self, pos):
@@ -116,10 +118,6 @@ class Game:
 
         pygame.quit()
 
-questions = [
-    Question(".\\assets\\quiz\\question1\\question.png", ["Đỏ - Xanh - Vàng", "Đỏ - Xanh - Tím", "Đỏ - Hồng - Vàng", "Cam - Xanh - Vàng"], 0, ".\\assets\\quiz\\question1\\note.png")
-]
-
 if __name__ == "__main__":
-    game = Game(questions)
+    game = GiaiDo()
     game.run()

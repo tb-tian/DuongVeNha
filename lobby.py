@@ -1,6 +1,10 @@
 import pygame
 from sys import exit
 import csv
+
+from flashcards import Flashcards
+from quiz import GiaiDo
+from tomau import ToMau
 # pygame.init()
 # pygame.display.set_caption('DuongVeNha')
 # clock = pygame.time.Clock()
@@ -296,10 +300,13 @@ class Lobby:
 
                     elif(self.state == 'mode'):
                         if(self.rect_list[0].collidepoint(event.pos) and self.rect_list[4] == 'right'):
+                            Flashcards().run()
                             print('flashcards')
                         elif(self.rect_list[1].collidepoint(event.pos) and self.rect_list[4] == 'right'):
+                            GiaiDo().run()
                             print('giaido')
                         elif(self.rect_list[2].collidepoint(event.pos) and self.rect_list[4] == 'right'):
+                            ToMau().run()
                             print('tomau')
                         elif(self.rect_list[4] == 'right' and self.rect_list[3].collidepoint(event.pos)):
                             print('change right')
