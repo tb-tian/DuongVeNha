@@ -30,7 +30,16 @@ class Question:
 class GiaiDo:
     def __init__(self):
         self.questions = [
-            Question("./assets/quiz/question1/question.png", ["Đỏ - Xanh - Vàng", "Đỏ - Xanh - Tím", "Đỏ - Hồng - Vàng", "Cam - Xanh - Vàng"], 0, "./assets/quiz/question1/note.png")
+            Question("./assets/quiz/question1/question.png", ["Đỏ - Xanh - Vàng", "Đỏ - Xanh - Tím", "Đỏ - Hồng - Vàng", "Cam - Xanh - Vàng"], 0, "./assets/quiz/question1/note.png"),
+            Question("./assets/quiz/question2/question.png", ["12", "7", "3", "6"], 2, "./assets/quiz/question2/note.png"),
+            Question("./assets/quiz/question3/question.png", ["Không quan tâm", "Nhắc nhở ba mẹ\nđội nón bảo hiểm", "Chỉ cần em \n đội nón bảo hiểm thôi", "Nhắc ba mẹ mặc áo khoác"], 1, None),
+            Question("./assets/quiz/question4/question.png", ["Ôm chặt ba để không bị té", "Không quan tâm", "Nhắc nhở ba tuân thủ luật \n giao thông để tránh \n gặp tai nạn", "Cả 3 đáp án đều sai"], 2, None),
+            Question("./assets/quiz/question5/question.png", ["Qua đường ngay lập tức", "Chờ đến khi có người \n cùng muốn qua đường để \n đi chung", "Quan sát kĩ đến khi \n đường vắng xe rồi \n mới sang đường", "Bấm còi để mọi người chú ý"], 2, None),
+            Question("./assets/quiz/question6/question.png", ["Cùng các bạn đi dàn\nhàng ngang trên đường để\nngười lái xe dễ quan sát thấy", "Chỉ cần đi chậm vì \n xe sẽ tự né mình", "Đi bộ trên vỉa hè hoặc sát\nmép đường phía bên phải\n và luôn chú ý quan sát các \n phương tiện giao thông", "Chạy thật nhanh về \n nhà để an toàn"], 2, None),
+            Question("./assets/quiz/question7/question.png", ["Chở 2 người lớn ngồi sau", "Chở 1 người ngồi sau", "Chở 1 người lớn và 2 \n trẻ em dưới 11 tuổi ngồi sau", "Tất cả đáp án đều sai"], 0, None),
+            Question("./assets/quiz/question8/question.png", ["Đi bên phải theo chiều \n đi của mình", "Đi đúng phần đường quy định", "Chấp hành biển báo \n dành cho người đi bộ", "Tất cả các ý trên đều đúng"], 3, None),
+            Question("./assets/quiz/question9/question.png", ["Biển 1", "Biển 1 và 3", "Biển 2", "Biển 2 và 3"], 2, None),
+            Question("./assets/quiz/question10/question.png", ["Biển 1", "Biển 2", "Biển 1 và 3", "Biển 2 và 3"], 1, None)
         ]
         self.current_question = 0
         self.state = "question"  # can be "question" or "note"
@@ -171,6 +180,7 @@ class GiaiDo:
             pygame.display.flip()
 
         pygame.quit()
+
 
 if __name__ == "__main__":
     game = GiaiDo()
