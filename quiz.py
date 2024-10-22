@@ -33,6 +33,7 @@ class GiaiDo:
         self.current_question = 0
         self.state = "question"  # can be "question" or "note"
         self.selected_answer = None
+        self.corrected = False
         self.background = pygame.image.load("./assets/quiz/bg.png")
         self.background = pygame.transform.scale(self.background, (WIDTH, HEIGHT))
         self.exit_button_image = pygame.image.load("./assets/quiz/exit.png") 
@@ -43,12 +44,15 @@ class GiaiDo:
 
     def handle_click(self, pos):
         if self.state == "question":
-            for i in range(4):
-                x = 150 + (i % 2) * 375
-                y = 350 + (i // 2) * 150
-                if pygame.Rect(x, y, 350, 100).collidepoint(pos):
-                    self.selected_answer = i
-                    return
+            if not self.corrected:
+                for i in range(4):
+                    x = 150 + (i % 2) * 375
+                    y = 350 + (i // 2) * 150
+                    if pygame.Rect(x, y, 350, 100).collidepoint(pos):
+                        self.selected_answer = i
+                        if self.selected_answer == self.questions[self.current_question].correct_answer:
+                            self.corrected = True
+                        return
             
             if self.selected_answer is not None:
                 if self.selected_answer == self.questions[self.current_question].correct_answer:
@@ -63,6 +67,7 @@ class GiaiDo:
                                 self.current_question = 0
                             self.state = "question"
                             self.selected_answer = None
+                            self.corrected = False
         elif self.state == "note":
             if pygame.Rect(800, 50, 160, 50).collidepoint(pos):
                 self.current_question += 1
@@ -70,6 +75,7 @@ class GiaiDo:
                     self.current_question = 0
                 self.state = "question"
                 self.selected_answer = None
+                self.corrected = False
 
     
     def render_text(self, text, x, y, max_width, max_height):
