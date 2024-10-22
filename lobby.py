@@ -101,6 +101,11 @@ class Lobby:
                 if row['username'] == username and row['password'] == password:
                     return True
         return False
+    
+    def register_user(self, username, password):
+        with open('database.csv', mode='a', newline='') as file:
+            writer = csv.DictWriter(file, fieldnames=['username', 'password'])
+            writer.writerow({'username': username, 'password': password})
 
     def init_lobby(self):
         self.background = pygame.image.load('./assets/background.png').convert()
@@ -334,7 +339,12 @@ class Lobby:
                                 self.state = 'lobby'
                             else:
                                 self.error = "Invalid credentials"
-                                
+                        if(self.register_rect.collidepoint(event.pos)):
+                            if self.username_text and self.password_text:
+                                self.register_user(self.username_text, self.password_text)
+                                self.error = "Registration successful"
+                            else:
+                                self.error = "Please fill in all fields"  
 
                         if(self.username_input.collidepoint(event.pos)):
                             self.username_active = True
