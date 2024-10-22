@@ -4,10 +4,10 @@ import os.path
 from sys import exit
 
 class Flashcards:
-    def __init__(self):
+    def __init__(self, screen, clock):
         pygame.init()
-        self.screen = pygame.display.set_mode((1000, 707))
-        self.clock = pygame.time.Clock()
+        self.screen = screen
+        self.clock = clock
         self.question_count = 3
         self.current_question = random.randint(1, self.question_count)
         self.state = 'question'
@@ -109,5 +109,7 @@ class Flashcards:
             self.clock.tick(60)
 
 if __name__ == "__main__":
-    flashcards = Flashcards()
+    screen = pygame.display.set_mode((1000, 707))
+    clock = pygame.time.Clock()
+    flashcards = Flashcards(screen, clock)
     flashcards.run()

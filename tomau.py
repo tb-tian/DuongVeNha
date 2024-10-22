@@ -2,10 +2,10 @@ import pygame
 from sys import exit
 
 class ToMau:
-    def __init__(self):
+    def __init__(self, screen, clock):
         pygame.init()
-        self.screen = pygame.display.set_mode((1000, 707))
-        self.clock = pygame.time.Clock()
+        self.screen = screen
+        self.clock = clock
         self.state = 'game'
         self.color = 'white'
         self.init = False
@@ -98,5 +98,6 @@ class ToMau:
             self.clock.tick(60)
 
 if __name__ == "__main__":
-    ToMau().run()
-        
+    screen = pygame.display.set_mode((1000, 707))
+    clock = pygame.time.Clock()
+    ToMau(screen, clock).run()

@@ -1,21 +1,7 @@
 import pygame
+from variables import *
 
-pygame.init()
 
-# Set up display
-WIDTH, HEIGHT = 1000, 707
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Quiz Game")
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-PEACH = (255, 218, 185)
-
-font = pygame.font.Font("./Roboto-Medium.ttf", 25)
-
-exit_button_image = pygame.image.load("./assets/quiz/exit.png") 
-exit_button_image = pygame.transform.scale(exit_button_image, (150, 70)) 
 
 class Question:
     def __init__(self, image_path, answers, correct_answer, note_image_path):
@@ -28,7 +14,10 @@ class Question:
             self.note_image = None
 
 class GiaiDo:
-    def __init__(self):
+    def __init__(self, screen, clock):
+        pygame.init()
+        self.screen = screen
+        self.clock = clock
         self.questions = [
             Question("./assets/quiz/question1/question.png", ["Đỏ - Xanh - Vàng", "Đỏ - Xanh - Tím", "Đỏ - Hồng - Vàng", "Cam - Xanh - Vàng"], 0, "./assets/quiz/question1/note.png"),
             Question("./assets/quiz/question2/question.png", ["12", "7", "3", "6"], 2, "./assets/quiz/question2/note.png"),
@@ -46,6 +35,11 @@ class GiaiDo:
         self.selected_answer = None
         self.background = pygame.image.load("./assets/quiz/bg.png")
         self.background = pygame.transform.scale(self.background, (WIDTH, HEIGHT))
+        self.exit_button_image = pygame.image.load("./assets/quiz/exit.png") 
+        self.exit_button_image = pygame.transform.scale(self.exit_button_image, (150, 70)) 
+
+
+        self.font = pygame.font.Font("./Roboto-Medium.ttf", 25)
 
     def handle_click(self, pos):
         if self.state == "question":
@@ -77,36 +71,32 @@ class GiaiDo:
                 self.state = "question"
                 self.selected_answer = None
 
-        # Check if the exit button is clicked
-        if pygame.Rect(25, 35, 150, 70).collidepoint(pos):
-            pygame.quit()
-            exit()
     
     def render_text(self, text, x, y, max_width, max_height):
         font_size = 25
-        font = pygame.font.Font("./Roboto-Medium.ttf", font_size)
+        self.font = pygame.font.Font("./Roboto-Medium.ttf", font_size)
         lines = text.split('\n')
         rendered_lines = []
 
         for line in lines:
-            text_surface = font.render(line, True, BLACK)
+            text_surface = self.font.render(line, True, BLACK)
             while text_surface.get_width() > max_width and font_size > 10:
                 font_size -= 1
-                font = pygame.font.Font("./Roboto-Medium.ttf", font_size)
-                text_surface = font.render(line, True, BLACK)
+                self.font = pygame.font.Font("./Roboto-Medium.ttf", font_size)
+                text_surface = self.font.render(line, True, BLACK)
             rendered_lines.append(text_surface)
 
         total_height = sum(line.get_height() for line in rendered_lines)
         while total_height > max_height and font_size > 10:
             font_size -= 1
-            font = pygame.font.Font("./Roboto-Medium.ttf", font_size)
+            self.font = pygame.font.Font("./Roboto-Medium.ttf", font_size)
             rendered_lines = []
             for line in lines:
-                text_surface = font.render(line, True, BLACK)
+                text_surface = self.font.render(line, True, BLACK)
                 while text_surface.get_width() > max_width and font_size > 10:
                     font_size -= 1
-                    font = pygame.font.Font("./Roboto-Medium.ttf", font_size)
-                    text_surface = font.render(line, True, BLACK)
+                    self.font = pygame.font.Font("./Roboto-Medium.ttf", font_size)
+                    text_surface = self.font.render(line, True, BLACK)
                 rendered_lines.append(text_surface)
             total_height = sum(line.get_height() for line in rendered_lines)
 
@@ -114,14 +104,14 @@ class GiaiDo:
 
         for line in rendered_lines:
             text_rect = line.get_rect(center=(x, start_y + line.get_height() // 2))
-            screen.blit(line, text_rect)
+            self.screen.blit(line, text_rect)
             start_y += line.get_height()
     
     def draw_question(self):
-        screen.blit(self.background, (0, 0))
+        self.screen.blit(self.background, (0, 0))
         question = self.questions[self.current_question]
         question.image = pygame.transform.scale(question.image, (800, 200))
-        screen.blit(question.image, (110, 120))
+        self.screen.blit(question.image, (110, 120))
         for i, answer in enumerate(question.answers):
             x = 150 + (i % 2) * 375
             y = 350 + (i // 2) * 150
@@ -133,32 +123,32 @@ class GiaiDo:
                         inner_color = GREEN
                     else:
                         inner_color = RED
-            pygame.draw.rect(screen, border_color, (x - 5, y - 5, 360, 110), border_radius=20)  # Border
-            pygame.draw.rect(screen, inner_color, (x, y, 350, 100), border_radius=20)  
+            pygame.draw.rect(self.screen, border_color, (x - 5, y - 5, 360, 110), border_radius=20)  # Border
+            pygame.draw.rect(self.screen, inner_color, (x, y, 350, 100), border_radius=20)  
             self.render_text(answer, x + 175, y + 50, 340, 100)  
         
         if self.selected_answer is not None and self.selected_answer == question.correct_answer:
             next_x, next_y = 800, 50
-            pygame.draw.rect(screen, BLACK, (next_x - 10, next_y - 5, 170, 60), border_radius=20)  # Border
-            pygame.draw.rect(screen, PEACH, (next_x - 5, next_y, 160, 50), border_radius=20)  
-            next_text = font.render("Tiếp tục", True, BLACK)
+            pygame.draw.rect(self.screen, BLACK, (next_x - 10, next_y - 5, 170, 60), border_radius=20)  # Border
+            pygame.draw.rect(self.screen, PEACH, (next_x - 5, next_y, 160, 50), border_radius=20)  
+            next_text = self.font.render("Tiếp tục", True, BLACK)
             next_text_rect = next_text.get_rect(center=(next_x + 75, next_y + 25))
-            screen.blit(next_text, next_text_rect)
+            self.screen.blit(next_text, next_text_rect)
         
-        screen.blit(exit_button_image, (25, 35))
+        self.screen.blit(self.exit_button_image, (25, 35))
             
     def draw_note(self):
-        screen.blit(self.background, (0, 0))
+        self.screen.blit(self.background, (0, 0))
         question = self.questions[self.current_question]
         question.note_image = pygame.transform.scale(question.note_image, (900, 620))
-        screen.blit(question.note_image, (45, 100))
+        self.screen.blit(question.note_image, (45, 100))
         next_question_x, next_question_y = 800, 50
-        pygame.draw.rect(screen, BLACK, (next_question_x - 10, next_question_y - 5, 170, 60), border_radius=20)  # Border
-        pygame.draw.rect(screen, PEACH, (next_question_x - 5, next_question_y, 160, 50), border_radius=20)  
-        next_question_text = font.render("Tiếp tục", True, BLACK)
+        pygame.draw.rect(self.screen, BLACK, (next_question_x - 10, next_question_y - 5, 170, 60), border_radius=20)  # Border
+        pygame.draw.rect(self.screen, PEACH, (next_question_x - 5, next_question_y, 160, 50), border_radius=20)  
+        next_question_text = self.font.render("Tiếp tục", True, BLACK)
         next_question_text_rect = next_question_text.get_rect(center=(next_question_x + 75, next_question_y + 25))
-        screen.blit(next_question_text, next_question_text_rect)
-        screen.blit(exit_button_image, (25, 35))
+        self.screen.blit(next_question_text, next_question_text_rect)
+        self.screen.blit(self.exit_button_image, (25, 35))
 
     def draw_current_state(self):
         if self.state == "question":
@@ -173,15 +163,22 @@ class GiaiDo:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+                    break
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    self.handle_click(event.pos)
+                    # Check if the exit button is clicked
+                    if pygame.Rect(25, 35, 150, 70).collidepoint(event.pos):
+                        running = False
+                        break
+                    else:
+                        self.handle_click(event.pos)
             
             self.draw_current_state()
             pygame.display.flip()
 
-        pygame.quit()
 
 
 if __name__ == "__main__":
-    game = GiaiDo()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    clock = pygame.time.Clock()
+    game = GiaiDo(screen, clock)
     game.run()

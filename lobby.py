@@ -300,14 +300,14 @@ class Lobby:
 
                     elif(self.state == 'mode'):
                         if(self.rect_list[0].collidepoint(event.pos) and self.rect_list[4] == 'right'):
-                            Flashcards().run()
                             print('flashcards')
+                            Flashcards(self.screen, self.clock).run()
                         elif(self.rect_list[1].collidepoint(event.pos) and self.rect_list[4] == 'right'):
-                            GiaiDo().run()
                             print('giaido')
+                            GiaiDo(self.screen, self.clock).run()
                         elif(self.rect_list[2].collidepoint(event.pos) and self.rect_list[4] == 'right'):
-                            ToMau().run()
                             print('tomau')
+                            ToMau(self.screen, self.clock).run()
                         elif(self.rect_list[4] == 'right' and self.rect_list[3].collidepoint(event.pos)):
                             print('change right')
                             self.change_mode('right')
