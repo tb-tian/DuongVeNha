@@ -37,7 +37,8 @@ class GiaiDo:
         self.background = pygame.image.load("./assets/quiz/bg.png")
         self.background = pygame.transform.scale(self.background, (WIDTH, HEIGHT))
         self.exit_button_image = pygame.image.load("./assets/quiz/exit.png") 
-        self.exit_button_image = pygame.transform.scale(self.exit_button_image, (150, 70)) 
+        self.exit_button_image = pygame.transform.scale(self.exit_button_image, (146, 50))
+        self.exit_button_image_rect = self.exit_button_image.get_rect(topleft = (50, 30))
 
 
         self.font = pygame.font.Font("./Roboto-Medium.ttf", 25)
@@ -154,7 +155,7 @@ class GiaiDo:
         next_question_text = self.font.render("Tiếp tục", True, BLACK)
         next_question_text_rect = next_question_text.get_rect(center=(next_question_x + 75, next_question_y + 25))
         self.screen.blit(next_question_text, next_question_text_rect)
-        self.screen.blit(self.exit_button_image, (25, 35))
+        self.screen.blit(self.exit_button_image, self.exit_button_image_rect)
 
     def draw_current_state(self):
         if self.state == "question":

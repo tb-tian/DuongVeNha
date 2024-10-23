@@ -31,18 +31,30 @@ class ToMau:
         self.bg_coloring = self.bg_mask.to_surface()
         self.bg_coloring.set_colorkey((0, 0, 0))
 
+        self.exit_button = pygame.image.load('./assets/tomau/exit.png').convert_alpha()
+        self.exit_button = pygame.transform.scale(self.exit_button, (146, 50))
+        self.exit_button_rect = self.exit_button.get_rect(topleft = (50, 30))
+
+
         self.outline = pygame.image.load('./assets/tomau/picture/outline.png').convert_alpha()
         self.outline = pygame.transform.scale(self.outline, (500, 500))
         self.outline_rect = self.outline.get_rect(center = (500, 450))
 
         self.colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'brown', 'white']
         self.color_buttons = []
-        button_width = 50
-        button_height = 50
+        self.colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'brown', 'white']
+        self.color_buttons = []
+        button_radius = 25  # Radius for the circular buttons
+        spacing = 10
+        total_width = len(self.colors) * (2 * button_radius) + (len(self.colors) - 1) * spacing
+        start_x = (self.screen.get_width() - total_width) // 2
+        start_y = 70  # Top of the screen
+
         for i, color in enumerate(self.colors):
-            button_surface = pygame.Surface((button_width, button_height))
-            button_surface.fill(pygame.Color(color))
-            button_rect = button_surface.get_rect(topleft=(10 + i * (button_width + 10), 10))
+            button_surface = pygame.Surface((2 * button_radius, 2 * button_radius), pygame.SRCALPHA)
+            pygame.draw.circle(button_surface, pygame.Color(color), (button_radius, button_radius), button_radius)
+            pygame.draw.circle(button_surface, pygame.Color('black'), (button_radius, button_radius), button_radius, 2)  # Black border
+            button_rect = button_surface.get_rect(topleft=(start_x + i * (2 * button_radius + spacing), start_y))
             self.color_buttons.append((button_surface, button_rect, color))
         
     def draw_background(self):
@@ -51,6 +63,7 @@ class ToMau:
         self.screen.blit(self.bg, self.bg_rect)
         self.screen.blit(self.arrow_coloring, self.arrow_rect)
         self.screen.blit(self.bg_coloring, self.bg_rect)
+        self.screen.blit(self.exit_button, self.exit_button_rect)
         self.screen.blit(self.outline, self.outline_rect)
         for button_surface, button_rect, color in self.color_buttons:
             self.screen.blit(button_surface, button_rect)
@@ -63,7 +76,8 @@ class ToMau:
                     surface.set_at((x, y), pygame.Color(color))
 
     def run(self):
-        while(True):
+        running = True
+        while(running):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -87,6 +101,10 @@ class ToMau:
                         if(self.arrow_mask.get_at(pos_in_arrow_mask) == 1):
                             self.coloring(self.arrow_coloring, self.color)
                             print("Arrow")
+                    
+                    if (self.exit_button_rect.collidepoint(event.pos)):
+                        running = False
+                        break
                     
                 
             if self.init == False:

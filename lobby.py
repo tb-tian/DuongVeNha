@@ -25,35 +25,35 @@ class Lobby:
     def init_login(self):
         self.init = True
 
-        self.background = pygame.image.load('./assets/background.png').convert()
+        self.background = pygame.image.load('./assets/login/background.png').convert()
         self.background = pygame.transform.scale(self.background, (1000, 707))
         self.background_rect = self.background.get_rect(topleft = (0, 0))
 
-        self.name = pygame.image.load('./assets/game_name.png')
+        self.name = pygame.image.load('./assets/login/game_name.png')
         self.name = pygame.transform.scale(self.name, (424, 91))
         self.name_rect = self.name.get_rect(center = (500, 83))
 
-        self.bulletin_board = pygame.image.load('./assets/bulletin_board.png').convert_alpha()
+        self.bulletin_board = pygame.image.load('./assets/login/bulletin_board.png').convert_alpha()
         self.bulletin_board = pygame.transform.scale(self.bulletin_board, (573, 488))
         self.bulletin_board_rect = self.bulletin_board.get_rect(center = (500, 373))
 
-        self.exit = pygame.image.load('./assets/exit.png')
+        self.exit = pygame.image.load('./assets/login/exit.png')
         self.exit = pygame.transform.scale(self.exit, (146, 50))
         self.exit_rect = self.exit.get_rect(center = (350, 587))
 
-        self.register = pygame.image.load('./assets/register.png')
+        self.register = pygame.image.load('./assets/login/register.png')
         self.register = pygame.transform.scale(self.register, (146, 50))
         self.register_rect = self.register.get_rect(center = (650, 587))
 
-        self.login = pygame.image.load('./assets/login.png')
+        self.login = pygame.image.load('./assets/login/login.png')
         self.login = pygame.transform.scale(self.login, (146, 50))
         self.login_rect = self.login.get_rect(center = (650, 527))
 
-        self.username = pygame.image.load('./assets/username.png')
+        self.username = pygame.image.load('./assets/login/username.png')
         self.username = pygame.transform.scale(self.username, (510, 56))
         self.username_rect = self.username.get_rect(center = (500, 325))
 
-        self.password = pygame.image.load('./assets/password.png')
+        self.password = pygame.image.load('./assets/login/password.png')
         self.password = pygame.transform.scale(self.password, (510, 56))
         self.password_rect = self.password.get_rect(center = (500, 400))
 
@@ -108,35 +108,35 @@ class Lobby:
             writer.writerow({'username': username, 'password': password})
 
     def init_lobby(self):
-        self.background = pygame.image.load('./assets/background.png').convert()
+        self.background = pygame.image.load('./assets/lobby/background.png').convert()
         self.background = pygame.transform.scale(self.background, (1000, 707))
         self.background_rect = self.background.get_rect(topleft = (0, 0))
 
-        self.start = pygame.image.load('./assets/start.png')
+        self.start = pygame.image.load('./assets/lobby/start.png')
         self.start = pygame.transform.scale(self.start, (245, 85))
         self.start_rect = self.start.get_rect(center = (500, 635))
 
-        self.setting = pygame.image.load('./assets/setting.png')
+        self.setting = pygame.image.load('./assets/lobby/setting.png')
         self.setting = pygame.transform.scale(self.setting, (59, 59))
         self.setting_rect = self.setting.get_rect(center = (940, 52))
 
-        self.feedback = pygame.image.load('./assets/feedback.png')
+        self.feedback = pygame.image.load('./assets/lobby/feedback.png')
         self.feedback = pygame.transform.scale(self.feedback, (65, 47))
         self.feedback_rect = self.feedback.get_rect(center = (943, 125))
 
-        self.account = pygame.image.load('./assets/account.png')
+        self.account = pygame.image.load('./assets/lobby/account.png')
         self.account = pygame.transform.scale(self.account, (68, 68))
         self.account_rect = self.account.get_rect(center = (942, 203))
 
-        self.name = pygame.image.load('./assets/game_name.png')
+        self.name = pygame.image.load('./assets/lobby/game_name.png')
         self.name = pygame.transform.scale(self.name, (424, 91))
         self.name_rect = self.name.get_rect(center = (500, 83))
 
-        self.logo = pygame.image.load('./assets/logo.png')
+        self.logo = pygame.image.load('./assets/lobby/logo.png')
         self.logo = pygame.transform.scale(self.logo, (292, 270))
         self.logo_rect = self.logo.get_rect(center = (500, 353))
 
-        self.sign = pygame.image.load('./assets/sign.png')
+        self.sign = pygame.image.load('./assets/lobby/sign.png')
         self.sign = pygame.transform.scale(self.sign, (253, 296))
         self.sign_rect = self.sign.get_rect(bottomright = (975, 725))
         self.friend_rect = pygame.Rect(780, 480, 130, 35)
@@ -154,23 +154,23 @@ class Lobby:
         
 
     def init_mode(self):
-        self.background = pygame.image.load('./assets/mode.png').convert()
+        self.background = pygame.image.load('./assets/mode/mode.png').convert()
         self.background = pygame.transform.scale(self.background, (1000, 707))
         self.background_rect = self.background.get_rect(topleft = (0, 0))
 
-        self.flashcards = pygame.image.load('./assets/flashcards.png')
+        self.flashcards = pygame.image.load('./assets/mode/flashcards.png')
         self.flashcards = pygame.transform.scale(self.flashcards, (206, 206))
         self.flashcards_rect = self.flashcards.get_rect(center = (248, 375))
 
-        self.giaido = pygame.image.load('./assets/giaido.png')
+        self.giaido = pygame.image.load('./assets/mode/giaido.png')
         self.giaido = pygame.transform.scale(self.giaido, (206, 206))
         self.giaido_rect = self.giaido.get_rect(center = (500, 375))
 
-        self.tomau = pygame.image.load('./assets/tomau.png')
+        self.tomau = pygame.image.load('./assets/mode/tomau.png')
         self.tomau = pygame.transform.scale(self.tomau, (206, 206))
         self.tomau_rect = self.tomau.get_rect(center = (751, 375))
 
-        self.right_arrow = pygame.image.load('./assets/right_arrow.png')
+        self.right_arrow = pygame.image.load('./assets/mode/right_arrow.png')
         self.right_arrow = pygame.transform.scale(self.right_arrow, (83, 107))
         self.right_arrow_rect = self.right_arrow.get_rect(center = (930, 375))
 
@@ -184,19 +184,19 @@ class Lobby:
         self.screen.blit(self.right_arrow, self.right_arrow_rect)
 
     def init_setting(self):
-        self.background = pygame.image.load('./assets/background.png').convert()
+        self.background = pygame.image.load('./assets/setting/background.png').convert()
         self.background = pygame.transform.scale(self.background, (1000, 707))
         self.background_rect = self.background.get_rect(topleft = (0, 0))
 
-        self.name = pygame.image.load('./assets/game_name.png')
+        self.name = pygame.image.load('./assets/setting/game_name.png')
         self.name = pygame.transform.scale(self.name, (424, 91))
         self.name_rect = self.name.get_rect(center = (500, 83))
 
-        self.bulletin_board = pygame.image.load('./assets/bulletin_board.png').convert_alpha()
+        self.bulletin_board = pygame.image.load('./assets/setting/bulletin_board.png').convert_alpha()
         self.bulletin_board = pygame.transform.scale(self.bulletin_board, (573, 488))
         self.bulletin_board_rect = self.bulletin_board.get_rect(center = (500, 373))
 
-        self.exit = pygame.image.load('./assets/exit.png')
+        self.exit = pygame.image.load('./assets/setting/exit.png')
         self.exit = pygame.transform.scale(self.exit, (146, 50))
         self.exit_rect = self.exit.get_rect(center = (500, 587))
 
@@ -219,23 +219,23 @@ class Lobby:
             # del self.right_arrow
             # del self.right_arrow_rect
 
-            self.background = pygame.image.load('./assets/mode.png').convert()
+            self.background = pygame.image.load('./assets/mode/mode.png').convert()
             self.background = pygame.transform.scale(self.background, (1000, 707))
             self.background_rect = self.background.get_rect(topleft = (0, 0))
 
-            self.left_arrow = pygame.image.load('./assets/left_arrow.png')
+            self.left_arrow = pygame.image.load('./assets/mode/left_arrow.png')
             self.left_arrow = pygame.transform.scale(self.left_arrow, (83, 107))
             self.left_arrow_rect = self.left_arrow.get_rect(center = (70, 375))
 
-            self.divenha = pygame.image.load('./assets/divenha.png')
+            self.divenha = pygame.image.load('./assets/mode/divenha.png')
             self.divenha = pygame.transform.scale(self.divenha, (206, 206))
             self.divenha_rect = self.divenha.get_rect(center = (248, 375))
 
-            self.dieukhienxe = pygame.image.load('./assets/dieukhienxe.png')
+            self.dieukhienxe = pygame.image.load('./assets/mode/dieukhienxe.png')
             self.dieukhienxe = pygame.transform.scale(self.dieukhienxe, (206, 206))
             self.dieukhienxe_rect = self.dieukhienxe.get_rect(center = (500, 375))
 
-            self.giaimamecung = pygame.image.load('./assets/giaimamecung.png')
+            self.giaimamecung = pygame.image.load('./assets/mode/giaimamecung.png')
             self.giaimamecung = pygame.transform.scale(self.giaimamecung, (206, 206))
             self.giaimamecung_rect = self.giaimamecung.get_rect(center = (751, 375))
 
