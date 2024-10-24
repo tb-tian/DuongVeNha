@@ -59,6 +59,7 @@ class Flashcards:
     def init_tip(self, question_number):
         if (os.path.isfile('./assets/flashcards/stages/tips/tip_' + str(question_number) + '.png')):
             self.tip = pygame.image.load('./assets/flashcards/stages/tips/tip_' + str(question_number) + '.png').convert_alpha()
+            self.tip = pygame.transform.scale(self.tip, (358, 216))
             self.tip_rect = self.tip.get_rect(bottomright = (1000, 707))
 
     def draw_tip(self, question_number):
