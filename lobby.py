@@ -17,10 +17,12 @@ class Lobby:
         self.screen = pygame.display.set_mode((1000, 707))
         self.clock = pygame.time.Clock()
         pygame.display.set_caption('DuongVeNha')
-        self.state = 'login'
+        self.state = 'lobby'
         self.init = False
         self.rect_list = [0, 0, 0, 0, 'right']
         self.font = pygame.font.SysFont('Consolas', 32, True)
+        self.username_text = ''
+        self.password_text = ''
 
     def init_login(self):
         self.init = True
@@ -62,8 +64,6 @@ class Lobby:
         self.color = pygame.Color('black')
         self.username_input = pygame.Rect(400, 300, 325, 50)
         self.password_input = pygame.Rect(400, 375, 325, 50)
-        self.username_text = ''
-        self.password_text = ''
         self.username_active = False
         self.password_active = False
         self.error = ''
@@ -152,6 +152,18 @@ class Lobby:
         self.screen.blit(self.logo, self.logo_rect)
         self.screen.blit(self.sign, self.sign_rect)
         
+    def init_login_noti(self):
+        self.login_noti = pygame.image.load('./assets/lobby/login_noti.png')
+        self.login_noti = pygame.transform.scale(self.login_noti, (716, 342))
+        self.login_noti_rect = self.login_noti.get_rect(bottomleft = (0, 707))
+
+        self.login = pygame.image.load('./assets/lobby/login.png')
+        self.login = pygame.transform.scale(self.login, (146, 50))
+        self.login_rect = self.login.get_rect(center = (500, 575))
+
+    def draw_login_noti(self):
+        self.screen.blit(self.login_noti, self.login_noti_rect)
+        self.screen.blit(self.login, self.login_rect)
 
     def init_mode(self):
         self.background = pygame.image.load('./assets/mode/mode.png').convert()
@@ -273,25 +285,13 @@ class Lobby:
                     # print(event.pos)
                     if(self.state == 'lobby'):
                         if(self.start_rect.collidepoint(event.pos)):
-                            del self.background
-                            del self.background_rect
-                            del self.start
-                            del self.start_rect
-                            del self.setting
-                            del self.setting_rect
-                            del self.feedback
-                            del self.feedback_rect
-                            del self.account
-                            del self.account_rect
-                            del self.name
-                            del self.name_rect
-                            del self.logo
-                            del self.logo_rect
-                            
-                            print('mode')
-                            self.state = 'mode'
-                        elif(self.setting_rect.collidepoint(event.pos)):
-                            
+                            if(self.username_text != '' and self.password_text != ''):
+                                print('mode')
+                                self.state = 'mode'
+                            else:
+                                print('login_noti')
+                                self.state = 'login_noti'
+                        elif(self.setting_rect.collidepoint(event.pos)):                        
                             print('setting')
                             self.state = 'setting'
                         elif(self.feedback_rect.collidepoint(event.pos)):
@@ -356,6 +356,15 @@ class Lobby:
                             self.username_active = False
                             self.password_active = False
                     
+                    elif self.state == 'login_noti':
+                        if(self.login_noti_rect.collidepoint(event.pos)):
+                            pass
+                        else:
+                            print('lobby')
+                            self.state = 'lobby'
+                        if(self.login_rect.collidepoint(event.pos)):
+                            self.state = 'login'
+                    
                 if self.state == 'login' and self.init == True:
                     if self.username_active:
                         if event.type == pygame.KEYDOWN:
@@ -380,6 +389,12 @@ class Lobby:
                 self.init_lobby()
                 self.draw_lobby()    
             
+            if(self.state == 'login_noti'):
+                self.init_lobby()
+                self.draw_lobby()
+                self.init_login_noti()
+                self.draw_login_noti()
+
             if(self.state == 'mode'):
                 if(self.rect_list[4] == 'right'):
                     self.init_mode()
