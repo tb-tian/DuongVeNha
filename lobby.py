@@ -186,6 +186,10 @@ class Lobby:
         self.right_arrow = pygame.transform.scale(self.right_arrow, (83, 107))
         self.right_arrow_rect = self.right_arrow.get_rect(center = (930, 375))
 
+        self.exit_button = pygame.image.load('./assets/flashcards/exit.png').convert_alpha()
+        self.exit_button = pygame.transform.scale(self.exit_button, (146, 50))
+        self.exit_button_rect = self.exit_button.get_rect(topleft = (50, 30))
+
         self.rect_list = [self.flashcards_rect, self.giaido_rect, self.tomau_rect, self.right_arrow_rect, 'right']
 
     def draw_mode(self):
@@ -194,6 +198,7 @@ class Lobby:
         self.screen.blit(self.giaido, self.giaido_rect)
         self.screen.blit(self.tomau, self.tomau_rect)
         self.screen.blit(self.right_arrow, self.right_arrow_rect)
+        self.screen.blit(self.exit_button, self.exit_button_rect)
 
     def init_setting(self):
         self.background = pygame.image.load('./assets/setting/background.png').convert()
@@ -304,6 +309,9 @@ class Lobby:
                             print('achievement')
 
                     elif(self.state == 'mode'):
+                        if(self.exit_button_rect.collidepoint(event.pos)):
+                            print('lobby')
+                            self.state = 'lobby'
                         if(self.rect_list[0].collidepoint(event.pos) and self.rect_list[4] == 'right'):
                             print('flashcards')
                             Flashcards(self.screen, self.clock).run()
