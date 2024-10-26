@@ -2,14 +2,9 @@ import pygame
 from sys import exit
 import csv
 
-from flashcards import Flashcards
-from quiz import GiaiDo
-from tomau import ToMau
-# pygame.init()
-# pygame.display.set_caption('DuongVeNha')
-# clock = pygame.time.Clock()
-
-
+from setting import Setting
+from login import Login
+from mode import Mode
 
 class Lobby:
     def __init__(self):
@@ -19,93 +14,13 @@ class Lobby:
         pygame.display.set_caption('DuongVeNha')
         self.state = 'lobby'
         self.init = False
-        self.rect_list = [0, 0, 0, 0, 'right']
         self.font = pygame.font.SysFont('Consolas', 32, True)
         self.username_text = ''
         self.password_text = ''
 
-    def init_login(self):
-        self.init = True
-
-        self.background = pygame.image.load('./assets/login/background.png').convert()
-        self.background = pygame.transform.scale(self.background, (1000, 707))
-        self.background_rect = self.background.get_rect(topleft = (0, 0))
-
-        self.name = pygame.image.load('./assets/login/game_name.png')
-        self.name = pygame.transform.scale(self.name, (424, 91))
-        self.name_rect = self.name.get_rect(center = (500, 83))
-
-        self.bulletin_board = pygame.image.load('./assets/login/bulletin_board.png').convert_alpha()
-        self.bulletin_board = pygame.transform.scale(self.bulletin_board, (573, 488))
-        self.bulletin_board_rect = self.bulletin_board.get_rect(center = (500, 373))
-
-        self.exit = pygame.image.load('./assets/login/exit.png')
-        self.exit = pygame.transform.scale(self.exit, (146, 50))
-        self.exit_rect = self.exit.get_rect(center = (350, 587))
-
-        self.register = pygame.image.load('./assets/login/register.png')
-        self.register = pygame.transform.scale(self.register, (146, 50))
-        self.register_rect = self.register.get_rect(center = (650, 587))
-
-        self.login = pygame.image.load('./assets/login/login.png')
-        self.login = pygame.transform.scale(self.login, (146, 50))
-        self.login_rect = self.login.get_rect(center = (650, 527))
-
-        self.username = pygame.image.load('./assets/login/username.png')
-        self.username = pygame.transform.scale(self.username, (510, 56))
-        self.username_rect = self.username.get_rect(center = (500, 325))
-
-        self.password = pygame.image.load('./assets/login/password.png')
-        self.password = pygame.transform.scale(self.password, (510, 56))
-        self.password_rect = self.password.get_rect(center = (500, 400))
-
-        self.color_active = pygame.Color(74, 232, 128)
-        self.color_passive = pygame.Color(232, 128, 74)
-        self.color = pygame.Color('black')
-        self.username_input = pygame.Rect(400, 300, 325, 50)
-        self.password_input = pygame.Rect(400, 375, 325, 50)
-        self.username_active = False
-        self.password_active = False
-        self.error = ''
-
-
-    def draw_login(self):
-        self.screen.blit(self.background, self.background_rect)
-        self.screen.blit(self.name, self.name_rect)
-        self.screen.blit(self.bulletin_board, self.bulletin_board_rect)
-        self.screen.blit(self.exit, self.exit_rect)
-        self.screen.blit(self.login, self.login_rect)
-        self.screen.blit(self.register, self.register_rect)
-        self.screen.blit(self.username, self.username_rect)
-        self.screen.blit(self.password, self.password_rect)
-        if self.username_active:
-            pygame.draw.rect(self.screen, self.color_active, self.username_input, 5)
-        else:
-            pygame.draw.rect(self.screen, self.color_passive, self.username_input, 5)
-        if self.password_active:
-            pygame.draw.rect(self.screen, self.color_active, self.password_input, 5)
-        else:
-            pygame.draw.rect(self.screen, self.color_passive, self.password_input, 5)
-        self.username_surface = self.font.render(self.username_text, True, self.color)
-        self.screen.blit(self.username_surface, (self.username_input.x + 10, self.username_input.y + 10))
-        self.password_surface = self.font.render(self.password_text, True, self.color)
-        self.screen.blit(self.password_surface, (self.password_input.x + 10, self.password_input.y + 10))
-        if self.error != '':
-            self.error_surface = self.font.render(self.error, True, "Red")
-            self.screen.blit(self.error_surface, (255, 445))
-
-    def check_credentials(self, username, password):
-        with open('database.csv', mode='r') as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                if row['username'] == username and row['password'] == password:
-                    return True
-        return False
-    
-    def register_user(self, username, password):
-        with open('database.csv', mode='a', newline='') as file:
-            writer = csv.DictWriter(file, fieldnames=['username', 'password'])
-            writer.writerow({'username': username, 'password': password})
+        self.settings = Setting(self)
+        self.login = Login(self)
+        self.mode = Mode(self)
 
     def init_lobby(self):
         self.background = pygame.image.load('./assets/lobby/background.png').convert()
@@ -151,133 +66,6 @@ class Lobby:
         self.screen.blit(self.name, self.name_rect)
         self.screen.blit(self.logo, self.logo_rect)
         self.screen.blit(self.sign, self.sign_rect)
-        
-    def init_login_noti(self):
-        self.login_noti = pygame.image.load('./assets/lobby/login_noti.png')
-        self.login_noti = pygame.transform.scale(self.login_noti, (716, 342))
-        self.login_noti_rect = self.login_noti.get_rect(bottomleft = (0, 707))
-
-        self.login = pygame.image.load('./assets/lobby/login.png')
-        self.login = pygame.transform.scale(self.login, (146, 50))
-        self.login_rect = self.login.get_rect(center = (500, 575))
-
-    def draw_login_noti(self):
-        self.screen.blit(self.login_noti, self.login_noti_rect)
-        self.screen.blit(self.login, self.login_rect)
-
-    def init_mode(self):
-        self.background = pygame.image.load('./assets/mode/mode.png').convert()
-        self.background = pygame.transform.scale(self.background, (1000, 707))
-        self.background_rect = self.background.get_rect(topleft = (0, 0))
-
-        self.flashcards = pygame.image.load('./assets/mode/flashcards.png')
-        self.flashcards = pygame.transform.scale(self.flashcards, (206, 206))
-        self.flashcards_rect = self.flashcards.get_rect(center = (248, 375))
-
-        self.giaido = pygame.image.load('./assets/mode/giaido.png')
-        self.giaido = pygame.transform.scale(self.giaido, (206, 206))
-        self.giaido_rect = self.giaido.get_rect(center = (500, 375))
-
-        self.tomau = pygame.image.load('./assets/mode/tomau.png')
-        self.tomau = pygame.transform.scale(self.tomau, (206, 206))
-        self.tomau_rect = self.tomau.get_rect(center = (751, 375))
-
-        self.right_arrow = pygame.image.load('./assets/mode/right_arrow.png')
-        self.right_arrow = pygame.transform.scale(self.right_arrow, (83, 107))
-        self.right_arrow_rect = self.right_arrow.get_rect(center = (930, 375))
-
-        self.exit_button = pygame.image.load('./assets/flashcards/exit.png').convert_alpha()
-        self.exit_button = pygame.transform.scale(self.exit_button, (146, 50))
-        self.exit_button_rect = self.exit_button.get_rect(topleft = (50, 30))
-
-        self.rect_list = [self.flashcards_rect, self.giaido_rect, self.tomau_rect, self.right_arrow_rect, 'right']
-
-    def draw_mode(self):
-        self.screen.blit(self.background, self.background_rect)
-        self.screen.blit(self.flashcards, self.flashcards_rect)
-        self.screen.blit(self.giaido, self.giaido_rect)
-        self.screen.blit(self.tomau, self.tomau_rect)
-        self.screen.blit(self.right_arrow, self.right_arrow_rect)
-        self.screen.blit(self.exit_button, self.exit_button_rect)
-
-    def init_setting(self):
-        self.background = pygame.image.load('./assets/setting/background.png').convert()
-        self.background = pygame.transform.scale(self.background, (1000, 707))
-        self.background_rect = self.background.get_rect(topleft = (0, 0))
-
-        self.name = pygame.image.load('./assets/setting/game_name.png')
-        self.name = pygame.transform.scale(self.name, (424, 91))
-        self.name_rect = self.name.get_rect(center = (500, 83))
-
-        self.bulletin_board = pygame.image.load('./assets/setting/bulletin_board.png').convert_alpha()
-        self.bulletin_board = pygame.transform.scale(self.bulletin_board, (573, 488))
-        self.bulletin_board_rect = self.bulletin_board.get_rect(center = (500, 373))
-
-        self.exit = pygame.image.load('./assets/setting/exit.png')
-        self.exit = pygame.transform.scale(self.exit, (146, 50))
-        self.exit_rect = self.exit.get_rect(center = (500, 587))
-
-    def draw_setting(self):
-        
-        self.screen.blit(self.background, self.background_rect)
-        self.screen.blit(self.name, self.name_rect)
-        self.screen.blit(self.bulletin_board, self.bulletin_board_rect)
-        self.screen.blit(self.exit, self.exit_rect)
-
-
-    def change_mode(self, direction):
-        if direction == 'right':
-            # del self.flashcards
-            # del self.flashcards_rect
-            # del self.giaido
-            # del self.giaido_rect
-            # del self.tomau
-            # del self.tomau_rect
-            # del self.right_arrow
-            # del self.right_arrow_rect
-
-            self.background = pygame.image.load('./assets/mode/mode.png').convert()
-            self.background = pygame.transform.scale(self.background, (1000, 707))
-            self.background_rect = self.background.get_rect(topleft = (0, 0))
-
-            self.left_arrow = pygame.image.load('./assets/mode/left_arrow.png')
-            self.left_arrow = pygame.transform.scale(self.left_arrow, (83, 107))
-            self.left_arrow_rect = self.left_arrow.get_rect(center = (70, 375))
-
-            self.divenha = pygame.image.load('./assets/mode/divenha.png')
-            self.divenha = pygame.transform.scale(self.divenha, (206, 206))
-            self.divenha_rect = self.divenha.get_rect(center = (248, 375))
-
-            self.dieukhienxe = pygame.image.load('./assets/mode/dieukhienxe.png')
-            self.dieukhienxe = pygame.transform.scale(self.dieukhienxe, (206, 206))
-            self.dieukhienxe_rect = self.dieukhienxe.get_rect(center = (500, 375))
-
-            self.giaimamecung = pygame.image.load('./assets/mode/giaimamecung.png')
-            self.giaimamecung = pygame.transform.scale(self.giaimamecung, (206, 206))
-            self.giaimamecung_rect = self.giaimamecung.get_rect(center = (751, 375))
-
-            self.screen.blit(self.background, self.background_rect)
-            self.screen.blit(self.divenha, self.divenha_rect)
-            self.screen.blit(self.dieukhienxe, self.dieukhienxe_rect)
-            self.screen.blit(self.giaimamecung, self.giaimamecung_rect)
-            self.screen.blit(self.left_arrow, self.left_arrow_rect)
-
-            self.rect_list = [self.divenha_rect, self.dieukhienxe_rect, self.giaimamecung_rect, self.left_arrow_rect, 'left']
-
-
-        elif direction == 'left':
-            del self.divenha
-            del self.divenha_rect
-            del self.dieukhienxe
-            del self.dieukhienxe_rect
-            del self.giaimamecung
-            del self.giaimamecung_rect
-            del self.left_arrow
-            del self.left_arrow_rect
-
-            self.init_mode()
-            self.draw_mode()
-
 
 
     def run(self):
@@ -296,7 +84,7 @@ class Lobby:
                             else:
                                 print('login_noti')
                                 self.state = 'login_noti'
-                        elif(self.setting_rect.collidepoint(event.pos)):                        
+                        elif(self.setting_rect.collidepoint(event.pos)):
                             print('setting')
                             self.state = 'setting'
                         elif(self.feedback_rect.collidepoint(event.pos)):
@@ -309,89 +97,29 @@ class Lobby:
                             print('achievement')
 
                     elif(self.state == 'mode'):
-                        if(self.exit_button_rect.collidepoint(event.pos)):
-                            print('lobby')
-                            self.state = 'lobby'
-                        if(self.rect_list[0].collidepoint(event.pos) and self.rect_list[4] == 'right'):
-                            print('flashcards')
-                            Flashcards(self.screen, self.clock).run()
-                        elif(self.rect_list[1].collidepoint(event.pos) and self.rect_list[4] == 'right'):
-                            print('giaido')
-                            GiaiDo(self.screen, self.clock).run()
-                        elif(self.rect_list[2].collidepoint(event.pos) and self.rect_list[4] == 'right'):
-                            print('tomau')
-                            ToMau(self.screen, self.clock).run()
-                        elif(self.rect_list[4] == 'right' and self.rect_list[3].collidepoint(event.pos)):
-                            print('change right')
-                            self.change_mode('right')
-                        elif(self.rect_list[4] == 'left' and self.rect_list[3].collidepoint(event.pos)):
-                            print('change left')
-                            self.change_mode('left')
-                        elif(self.rect_list[0].collidepoint(event.pos) and self.rect_list[4] == 'left'):
-                            print('divenha')
-                        elif(self.rect_list[1].collidepoint(event.pos) and self.rect_list[4] == 'left'):
-                            print('dieukhienxe')
-                        elif(self.rect_list[2].collidepoint(event.pos) and self.rect_list[4] == 'left'):
-                            print('giaimamecung')
+                        self.mode.handle_event(event)
                     
                     elif(self.state == 'setting'):
-                        if(self.exit_rect.collidepoint(event.pos)):
-                            self.state = 'lobby'
+                        self.settings.handle_event(event)
 
                     elif(self.state == 'login'):
-                        if(self.exit_rect.collidepoint(event.pos)):
-                            pygame.quit()
-                            exit()
-                        if(self.login_rect.collidepoint(event.pos)):
-                            if self.check_credentials(self.username_text, self.password_text):
-                                self.state = 'lobby'
-                            else:
-                                self.error = "Invalid credentials"
-                        if(self.register_rect.collidepoint(event.pos)):
-                            if self.username_text and self.password_text:
-                                self.register_user(self.username_text, self.password_text)
-                                self.error = "Registration successful"
-                            else:
-                                self.error = "Please fill in all fields"  
-
-                        if(self.username_input.collidepoint(event.pos)):
-                            self.username_active = True
-                            self.password_active = False
-                        elif(self.password_input.collidepoint(event.pos)):
-                            self.username_active = False
-                            self.password_active = True
-                        else:
-                            self.username_active = False
-                            self.password_active = False
+                        self.login.handle_event(event)
                     
                     elif self.state == 'login_noti':
-                        if(self.login_noti_rect.collidepoint(event.pos)):
+                        if(self.login.login_noti_rect.collidepoint(event.pos)):
                             pass
                         else:
                             print('lobby')
                             self.state = 'lobby'
-                        if(self.login_rect.collidepoint(event.pos)):
+                        if(self.login.login_rect.collidepoint(event.pos)):
                             self.state = 'login'
                     
                 if self.state == 'login' and self.init == True:
-                    if self.username_active:
-                        if event.type == pygame.KEYDOWN:
-                            self.error = ''
-                            if event.key == pygame.K_BACKSPACE:
-                                self.username_text = self.username_text[:-1]
-                            else:
-                                self.username_text += event.unicode
-                    if self.password_active:
-                        if event.type == pygame.KEYDOWN:
-                            self.error = ''
-                            if event.key == pygame.K_BACKSPACE:
-                                self.password_text = self.password_text[:-1]
-                            else:
-                                self.password_text += event.unicode
+                    self.login.handle_keydown(event)
                     
             if(self.state == 'login'):
-                if self.init == False: self.init_login()
-                self.draw_login()
+                if self.init == False: self.login.init_login()
+                self.login.draw_login()
             
             if(self.state == 'lobby'):
                 self.init_lobby()
@@ -400,19 +128,19 @@ class Lobby:
             if(self.state == 'login_noti'):
                 self.init_lobby()
                 self.draw_lobby()
-                self.init_login_noti()
-                self.draw_login_noti()
+                self.login.init_login_noti()
+                self.login.draw_login_noti()
 
             if(self.state == 'mode'):
-                if(self.rect_list[4] == 'right'):
-                    self.init_mode()
-                    self.draw_mode()
-                elif(self.rect_list[4] == 'left'):
+                if(self.mode.rect_list[4] == 'right'):
+                    self.mode.init_mode()
+                    self.mode.draw_mode()
+                elif(self.mode.rect_list[4] == 'left'):
                     pass
             
             if(self.state == 'setting'):
-                self.init_setting()
-                self.draw_setting()
+                self.settings.init_setting()
+                self.settings.draw_setting()
             
             pygame.display.update()
             self.clock.tick(60)
