@@ -1,5 +1,6 @@
 import pygame
 from utils import check_credentials, register_user
+import time
 
 class Login:
     def __init__(self, lobby):
@@ -59,17 +60,25 @@ class Login:
         self.lobby.screen.blit(self.username, self.username_rect)
         self.lobby.screen.blit(self.password, self.password_rect)
         if self.username_active:
-            pygame.draw.rect(self.lobby.screen, self.color_active, self.username_input, 5)
+            # pygame.draw.rect(self.lobby.screen, self.color_active, self.username_input, 5)
+            # draw cursor
+            cursor = pygame.Rect(self.username_input.x + self.lobby.font.size(self.lobby.username_text)[0], self.username_input.y + 10, 2, self.lobby.font.get_height())
+            if time.time() % 1 > 0.5:
+                pygame.draw.rect(self.lobby.screen, 'black', cursor)
         else:
             pygame.draw.rect(self.lobby.screen, self.color_passive, self.username_input, 5)
         if self.password_active:
-            pygame.draw.rect(self.lobby.screen, self.color_active, self.password_input, 5)
+            # pygame.draw.rect(self.lobby.screen, self.color_active, self.password_input, 5)
+            # draw cursor
+            cursor = pygame.Rect(self.password_input.x + self.lobby.font.size(self.lobby.password_text)[0], self.password_input.y + 10, 2, self.lobby.font.get_height())
+            if time.time() % 1 > 0.5:
+                pygame.draw.rect(self.lobby.screen, 'black', cursor)
         else:
             pygame.draw.rect(self.lobby.screen, self.color_passive, self.password_input, 5)
         self.username_surface = self.lobby.font.render(self.lobby.username_text, True, self.color)
-        self.lobby.screen.blit(self.username_surface, (self.username_input.x + 10, self.username_input.y + 10))
+        self.lobby.screen.blit(self.username_surface, (self.username_input.x, self.username_input.y + 10))
         self.password_surface = self.lobby.font.render(self.lobby.password_text, True, self.color)
-        self.lobby.screen.blit(self.password_surface, (self.password_input.x + 10, self.password_input.y + 10))
+        self.lobby.screen.blit(self.password_surface, (self.password_input.x, self.password_input.y + 10))
         if self.error != '':
             self.error_surface = self.lobby.font.render(self.error, True, "Red")
             self.lobby.screen.blit(self.error_surface, (255, 445))
